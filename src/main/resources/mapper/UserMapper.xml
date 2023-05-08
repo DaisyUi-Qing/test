@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daisy.demo.dao.UserMapper">
+  <resultMap id="BaseResultMap" type="com.daisy.demo.entity.User">
+    <!--@mbg.generated-->
+    <!--@Table `user`-->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="age" jdbcType="INTEGER" property="age" />
+    <result column="id_card" jdbcType="VARCHAR" property="idCard" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, `name`, age, id_card
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select
+    <include refid="Base_Column_List" />
+    from `user`
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    <!--@mbg.generated-->
+    delete from `user`
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.daisy.demo.entity.User">
+    <!--@mbg.generated-->
+    insert into `user` (id, `name`, age,
+      id_card)
+    values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER},
+      #{idCard,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.daisy.demo.entity.User">
+    <!--@mbg.generated-->
+    insert into `user`
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        `name`,
+      </if>
+      <if test="age != null">
+        age,
+      </if>
+      <if test="idCard != null">
+        id_card,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null">
+        #{age,jdbcType=INTEGER},
+      </if>
+      <if test="idCard != null">
+        #{idCard,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.daisy.demo.entity.User">
+    <!--@mbg.generated-->
+    update `user`
+    <set>
+      <if test="name != null">
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null">
+        age = #{age,jdbcType=INTEGER},
+      </if>
+      <if test="idCard != null">
+        id_card = #{idCard,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.daisy.demo.entity.User">
+    <!--@mbg.generated-->
+    update `user`
+    set `name` = #{name,jdbcType=VARCHAR},
+      age = #{age,jdbcType=INTEGER},
+      id_card = #{idCard,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <insert id="add" parameterType="com.daisy.demo.entity.User">
+    insert into user (id,name,age,id_card) value
+      (
+        (replace(uuid(),'-','')),
+        #{name},
+        #{age},
+        #{idCard}
+      )
+  </insert>
+
+  <select id="all" resultMap="BaseResultMap">
+    select *
+    from user
+    <where>
+      <if test="name != null and name != ''">
+        name like concat('%',#{name},'%')
+      </if>
+      <if test="age != null">
+        and age = #{age}
+      </if>
+    </where>
+    <if test="pageSize != null and pageSize != null">
+      limit #{start},#{pageSize}
+    </if>
+  </select>
+
+  <insert id="insertBatch">
+    insert into user (id,name,age,id_card)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (
+      (replace(uuid(),'-','')),
+      #{item.name},
+      #{item.age},
+      #{item.idCard}
+      )
+    </foreach>
+
+  </insert>
+
+  <select id="count" resultType="int">
+    select count(1) from user
+    <where>
+      <if test="name != null and name != ''">
+        name like concat('%',#{name},'%')
+      </if>
+    </where>
+  </select>
+</mapper>
